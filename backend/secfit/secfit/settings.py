@@ -112,8 +112,19 @@ if is_prod:
 
 # CORS Policy
 CORS_ORIGIN_ALLOW_ALL = (
-    True
+    True # "False" enables whitelist of origins and methods
 )
+
+# Whitelist
+CORS_ALLOWED_ORIGINS = [
+    
+]
+
+# Allowed methods
+CORS_ALLOW_METHODS = [
+    'GET',
+    'POST',
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
