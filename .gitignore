@@ -4,3 +4,5 @@ backend/secfit/*/__pycache__/
 backend/secfit/db.sqlite3
 venv/
 .vscode
+node_modules
+package-lock.json
