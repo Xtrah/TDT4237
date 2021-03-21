@@ -44,7 +44,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         data = self.get_initial()
 
         username = data.get("username")
-        if len(username) < 5 or len(username) > 21:
+        if len(username) < 4 or len(username) > 21:
             raise serializers.ValidationError("Username must be at least 5 characters long, but no longer than 21!")
 
         return value
