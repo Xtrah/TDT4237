@@ -2,11 +2,24 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model, password_validation
 from users.models import Offer, AthleteFile
 from django import forms
-
+from django.contrib.auth import authenticate
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     password = serializers.CharField(style={"input_type": "password"}, write_only=True)
     password1 = serializers.CharField(style={"input_type": "password"}, write_only=True)
+    
+    def validateLogin(self):
+        # https://docs.djangoproject.com/en/1.10/topics/auth/customizing/
+        user = authenticate(username='john', password='snow')
+        if user is not None:  
+            if user.is_active:   
+                # Denne fjernes og byttes ut med linje 19 av sikkerhetsårsaker
+                print("User is valid, active and authenticated")
+            else:
+                print("The password is valid, but the account has been disabled")
+        else:
+            # the authentication system was unable to verify the username and password
+            print("The username and password were incorrect. Have you remembered to activate your account?")
 
     class Meta:
         model = get_user_model()
@@ -17,7 +30,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             "username",
             "password",
             "password1",
-            "activated",
+            "is_active",
             "athletes",
             "coach",
             "workouts",
@@ -54,13 +67,15 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         username = validated_data["username"]
         email = validated_data["email"]
         password = validated_data["password"]
-        activated = 0
-        # TODO: Email verification
+        # TODO: Send Email verification
         user_obj = get_user_model()(username=username, email=email)
         user_obj.set_password(password)
         user_obj.save()
 
         return user_obj
+
+
+
 
 
 class UserGetSerializer(serializers.HyperlinkedModelSerializer):
