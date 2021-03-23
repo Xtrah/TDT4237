@@ -117,7 +117,8 @@ CORS_ORIGIN_ALLOW_ALL = (
 
 # Whitelist
 CORS_ALLOWED_ORIGINS = [
-    
+    'https://localhost:9090',
+    'http://localhost:9090'
 ]
 
 # Allowed methods
@@ -181,3 +182,5 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 DEBUG = True
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
