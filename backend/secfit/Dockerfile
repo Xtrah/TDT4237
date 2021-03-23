@@ -8,15 +8,15 @@ ENV PYTHONDONTWRITEBYTECODE 1
 # Make a new directory to put our code in.
 RUN mkdir /code
 
+# Add sqlite3 to enable dbshell command for managing the database
+RUN apt-get update -y && apt-get install sqlite3 -y
+
 # Change the working directory. 
 # Every command after this will be run from the /code directory.
 WORKDIR /code
 
 # Copy the of the code. 
 COPY . /code/
-
-# Add sqlite3 to enable dbshell command for managing the database
-RUN apt-get update -y && apt-get install sqlite3 -y
 
 # Upgrade pip
 RUN pip install --upgrade pip
@@ -47,4 +47,4 @@ RUN DJANGO_SUPERUSER_USERNAME=${DJANGO_SUPERUSER_USERNAME} \
 RUN python manage.py loaddata seed.json
 
 # Run wsgi server with gunicorn
-CMD ["gunicorn", "secfit.wsgi", "--log-file", "-", "-b", "0.0.0.0:8000"]
+CMD ["gunicorn", "secfit.wsgi", "--forwarded-allow-ips='*'", "--log-file", "-", "-b", "0.0.0.0:8000"]
