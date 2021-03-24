@@ -17,6 +17,9 @@ async function createNewUser(event) {
           setCookie("access", data.access, 86400, "/");
           setCookie("refresh", data.refresh, 86400, "/");
           sessionStorage.setItem("username", formData.get("username"));
+          // Alert that email has been sent
+          let completedAlert = createAlert("Registration completed! Please verify you email by clicking on the link we have sent");
+          document.body.prepend(completedAlert);
       } else {
         console.log("CAN'T GET JWT TOKEN ON REGISTRATION");
         let data = await response.json();

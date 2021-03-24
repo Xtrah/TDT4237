@@ -3,6 +3,8 @@ from django.contrib.auth import get_user_model, password_validation
 from users.models import Offer, AthleteFile
 from django import forms
 from django.contrib.auth import authenticate
+from django.core.mail import send_mail
+
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     password = serializers.CharField(style={"input_type": "password"}, write_only=True)
@@ -68,9 +70,11 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         email = validated_data["email"]
         password = validated_data["password"]
         # TODO: Send Email verification
+        send_mail("Subject", "Message", None, ["livia.e.v.stokke@ntnu.no"], fail_silently=False,)
         user_obj = get_user_model()(username=username, email=email)
         user_obj.set_password(password)
         user_obj.save()
+        
 
         return user_obj
 
