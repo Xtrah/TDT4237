@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "verify_email",
     "workouts.apps.WorkoutsConfig",
     "users.apps.UsersConfig",
     "comments.apps.CommentsConfig",

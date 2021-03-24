@@ -4,6 +4,7 @@ from users.models import Offer, AthleteFile
 from django import forms
 from django.contrib.auth import authenticate
 from django.core.mail import send_mail
+from verify_email.email_handler import send_verification_email
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -19,13 +20,26 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             "username",
             "password",
             "password1",
-            "activated",
+            "is_active",
             "athletes",
             "coach",
             "workouts",
             "coach_files",
             "athlete_files",
         ]
+
+    def validateLogin(self):
+        # https://docs.djangoproject.com/en/1.10/topics/auth/customizing/
+        user = authenticate(username='john', password='snow')
+        if user is not None:  
+            if user.is_active:   
+                # Denne fjernes og byttes ut med linje 19 av sikkerhetsårsaker
+                print("User is valid, active and authenticated")
+            else:
+                print("The password is valid, but the account has been disabled")
+        else:
+            # the authentication system was unable to verify the username and password
+            print("The username and password were incorrect. Have you remembered to activate your account?")
 
     def validate_password(self, value):
         data = self.get_initial()
@@ -57,12 +71,11 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         email = validated_data["email"]
         password = validated_data["password"]
         # TODO: Send Email verification
+        inactive_user = send_verification_email(validated_data, form)
         send_mail("Subject", "Message", None, ["livia.e.v.stokke@ntnu.no"], fail_silently=False,)
         user_obj = get_user_model()(username=username, email=email)
         user_obj.set_password(password)
         user_obj.save()
-        
-
         return user_obj
 
 
