@@ -30,10 +30,11 @@ from django.core.exceptions import PermissionDenied
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 import json
-from collections import namedtuple
-import base64, pickle
+import base64
 from django.core.signing import Signer
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 
 @api_view(["GET"])
 def api_root(request, format=None):
@@ -68,32 +69,35 @@ class RememberMe(
         if request.user.is_authenticated == False:
             raise PermissionDenied
         else:
-            return Response({"remember_me": self.rememberme()})
+            return Response({"remember_me": self.rememberme(request.user.username)})
 
     def post(self, request):
-        cookieObject = namedtuple("Cookies", request.COOKIES.keys())(
-            *request.COOKIES.values()
-        )
-        user = self.get_user(cookieObject)
-        refresh = RefreshToken.for_user(user)
-        return Response(
-            {
-                "refresh": str(refresh),
-                "access": str(refresh.access_token),
-            }
-        )
+        if cookie := request.COOKIES.get('remember_me', None):
+            user = self.get_user(cookie)
+            refresh = RefreshToken.for_user(user)
+            return Response(
+                {
+                    "refresh": str(refresh),
+                    "access": str(refresh.access_token),
+                }
+            )
+        raise PermissionDenied
 
-    def get_user(self, cookieObject):
-        decode = base64.b64decode(cookieObject.remember_me)
-        user, sign = pickle.loads(decode)
+    def get_user(self, cookie):
+        decode = base64.b64decode(cookie).decode()
+        user, sign = json.loads(decode)
 
         # Validate signature
         if sign == self.sign_user(user):
-            return user
+            try:
+                return User.objects.get(username=user)
+            except User.DoesNotExist:
+                pass
+        raise PermissionDenied
 
-    def rememberme(self):
-        creds = [self.request.user, self.sign_user(str(self.request.user))]
-        return base64.b64encode(pickle.dumps(creds))
+    def rememberme(self, username):
+        creds = [username, self.sign_user(username)]
+        return base64.b64encode(json.dumps(creds).encode())
 
     def sign_user(self, username):
         signer = Signer()
