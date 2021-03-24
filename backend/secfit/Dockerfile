@@ -15,14 +15,16 @@ RUN apt-get update -y && apt-get install sqlite3 -y
 # Every command after this will be run from the /code directory.
 WORKDIR /code
 
-# Copy the of the code. 
-COPY . /code/
+COPY ./requirements.txt /code/requirements.txt
 
 # Upgrade pip
 RUN pip install --upgrade pip
 
 # Install the requirements.
 RUN pip install -r requirements.txt
+
+# Copy the of the code. 
+COPY . /code/
 
 # Import groupid environment variable
 ENV GROUPID=${GROUPID}
