@@ -12,16 +12,18 @@ ARG PORT_PREFIX
 RUN apt-get update -y && apt-get upgrade -y
 RUN apt-get install -y curl
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
+RUN apt-get install -y nodejs
 
 # Set working dir
 WORKDIR /app
 
 # Transfer all our stuff to the builder
-COPY . /app/
+COPY ./package.json /app/package.json
+COPY ./package-lock.json /app/package-lock.json
 
-RUN apt-get install -y nodejs
 RUN npm install -g cordova && npm install shelljs
 
+COPY . /app/
 
 # Set the host variable in default.js (overwrite)
 RUN echo "const HOST = '${URL_PREFIX}${DOMAIN}:${PORT_PREFIX}${GROUPID}';" > ./www/scripts/defaults.js
