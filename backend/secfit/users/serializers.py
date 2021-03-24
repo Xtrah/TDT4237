@@ -9,19 +9,6 @@ from django.core.mail import send_mail
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     password = serializers.CharField(style={"input_type": "password"}, write_only=True)
     password1 = serializers.CharField(style={"input_type": "password"}, write_only=True)
-    
-    def validateLogin(self):
-        # https://docs.djangoproject.com/en/1.10/topics/auth/customizing/
-        user = authenticate(username='john', password='snow')
-        if user is not None:  
-            if user.is_active:   
-                # Denne fjernes og byttes ut med linje 19 av sikkerhetsårsaker
-                print("User is valid, active and authenticated")
-            else:
-                print("The password is valid, but the account has been disabled")
-        else:
-            # the authentication system was unable to verify the username and password
-            print("The username and password were incorrect. Have you remembered to activate your account?")
 
     class Meta:
         model = get_user_model()
@@ -32,7 +19,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             "username",
             "password",
             "password1",
-            "is_active",
+            "activated",
             "athletes",
             "coach",
             "workouts",
@@ -77,9 +64,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         
 
         return user_obj
-
-
-
 
 
 class UserGetSerializer(serializers.HyperlinkedModelSerializer):

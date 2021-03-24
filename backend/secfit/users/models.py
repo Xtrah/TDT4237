@@ -14,7 +14,6 @@ class User(AbstractUser):
     coach = models.ForeignKey(
         "self", on_delete=models.CASCADE, related_name="athletes", blank=True, null=True
     )
-    is_active = models.BooleanField(default=True)
 
 
 def athlete_directory_path(instance, filename):
