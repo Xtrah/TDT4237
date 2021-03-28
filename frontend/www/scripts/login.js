@@ -7,8 +7,8 @@ async function login() {
     if (response.ok) {
         let data = await response.json();
         // access and refresh cookies each have a max age of 24 hours
-        setCookie("access", data.access, 86400, "/");
-        setCookie("refresh", data.refresh, 86400, "/");
+        setCookie("access", data.access, 60*30, "/", samesite="Lax");
+        setCookie("refresh", data.refresh, 3600*24, "/", samesite='Lax');
         sessionStorage.setItem("username", formData.get("username"));
 
         window.location.replace("workouts.html");
@@ -24,10 +24,11 @@ async function login() {
         let response = await sendRequest("GET", `${HOST}/api/remember_me/`);
         if(response.ok) {
             let data = await response.json();
-            setCookie("remember_me", data.remember_me, 3000000000, "/");
+            setCookie("remember_me", data.remember_me, 3600*24*30, "/", samesite="Lax");
         }
     }
 };
+
 
 // Used for login if remember me cookie exists
 async function rememberMe() {

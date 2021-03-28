@@ -40,8 +40,8 @@ function updateNavBar() {
 }
 
 
-function setCookie(name, value, maxage, path="") {
-  document.cookie = `${name}=${value}; max-age=${maxage}; path=${path}`;
+function setCookie(name, value, maxage, path="", samesite="") {
+  document.cookie = `${name}=${value}; max-age=${maxage}; path=${path};sameSite=${samesite};secure`;
 }
 
 function deleteCookie(name) {
