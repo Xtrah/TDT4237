@@ -71,7 +71,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         email = validated_data["email"]
         password = validated_data["password"]
         # TODO: Send Email verification
-        inactive_user = send_verification_email(validated_data, form)
+
         send_mail("Subject", "Message", None, ["livia.e.v.stokke@ntnu.no"], fail_silently=False,)
         user_obj = get_user_model()(username=username, email=email)
         user_obj.set_password(password)
