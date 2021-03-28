@@ -21,12 +21,25 @@ groupid = os.environ.get("GROUPID", "0")
 # Email configuration
 # The host must be running within NTNU's VPN (vpn.ntnu.no) to allow this config
 # Usage: https://docs.djangoproject.com/en/3.1/topics/email/#obtaining-an-instance-of-an-email-backend
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 EMAIL_HOST = "smtp.stud.ntnu.no"
 EMAIL_USE_TLS = False
 EMAIL_PORT = 25
 DEFAULT_FROM_EMAIL = "tdt4237-group" + groupid + " " + "<noreply@idi.ntnu.no>"
 
+# Configure Djoser for email verification
+DJOSER = {
+    "USER_ID_FIELD": "username",
+    "LOGIN_FIELD": "email",
+    "SEND_ACTIVATION_EMAIL": True,
+    "ACTIVATION_URL": "activate/{uid}/{token}",
+    'SERIALIZERS': {
+        'token_create': 'users.serializers.CustomTokenCreateSerializer',
+        'activation': 'djoser.email.ActivationEmail',   
+    },
+}
+
+SITE_NAME = "SecFit"
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
@@ -61,6 +74,8 @@ INSTALLED_APPS = [
     "users.apps.UsersConfig",
     "comments.apps.CommentsConfig",
     "corsheaders",
+    "djoser",
+    "rest_framework.authtoken",
 ]
 
 MIDDLEWARE = [
@@ -152,12 +167,15 @@ STATIC_URL = "/static/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
 
+SIMPLE_JWT = {
+   'AUTH_HEADER_TYPES': ('JWT',),
+}
 
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 10,
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        'rest_framework.authentication.TokenAuthentication',
     ),
 }
 

@@ -2,7 +2,7 @@ async function createNewUser(event) {
     let form = document.querySelector("#form-register-user");
     let formData = new FormData(form);
 
-    let response = await sendRequest("POST", `${HOST}/api/users/`, formData, "");
+    let response = await sendRequest("POST", `${HOST}/api/v1/users/`, formData, "");
     
     if (!response.ok) {
       let data = await response.json();
@@ -11,7 +11,7 @@ async function createNewUser(event) {
 
     } else {
       let body = {username: formData.get("username"), password: formData.get("password")};
-      response = await sendRequest("POST", `${HOST}/api/token/`, body);
+      response = await sendRequest("POST", `${HOST}/api/v1/token/`, body);
       if (response.ok) {
           let data = await response.json();
           setCookie("access", data.access, 86400, "/");
