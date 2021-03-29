@@ -145,7 +145,7 @@ async function getCurrentUser() {
       user = data.results[0];
 
       // This code block fixes some CORS issues when enabling HTTPS
-      let host = `${HOST}`;
+      /*let host = `${HOST}`;
       if(host.includes('https')){
         user.url = ('https' + user.url.substring(4))
         if(user.coach){
@@ -156,7 +156,7 @@ async function getCurrentUser() {
             user.athletes[i] = ('https' + user.athletes[i].substring(4))
           }
         }
-      }
+      }*/
 
   }
 

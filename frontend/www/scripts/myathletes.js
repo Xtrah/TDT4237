@@ -24,10 +24,10 @@ async function displayCurrentRoster() {
         for (let offer of offers.results) {
 
             // This code block fixes some CORS issues when enabling HTTPS
-            let host = `${HOST}`;
+            /*let host = `${HOST}`;
             if(host.includes('https')){
                 offer.recipient = ('https' + offer.recipient.substring(4))
-            }
+            }*/
 
             let response = await sendRequest("GET", offer.recipient);
             let recipient = await response.json();
