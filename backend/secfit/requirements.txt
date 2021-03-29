@@ -17,6 +17,7 @@ Django-Verify-Email==0.0.5
 djangorestframework==3.12.2
 djangorestframework-simplejwt==4.6.0
 djoser==2.1.0
+django-otp==1.0.2 # 2fa ---
 gunicorn==20.0.4
 httpie==2.4.0
 idna==2.10

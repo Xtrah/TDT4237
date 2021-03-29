@@ -77,6 +77,8 @@ INSTALLED_APPS = [
     "corsheaders",
     "djoser",
     "rest_framework.authtoken",
+    "django_otp", # 2fa ---
+    "django_otp.plugins.otp_totp" # 2fa ---
 ]
 
 MIDDLEWARE = [
@@ -86,6 +88,7 @@ MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django_otp.middleware.OTPMiddleware", # 2fa ---
     "django.contrib.messages.middleware.MessageMiddleware",
 ]
 
