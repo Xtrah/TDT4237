@@ -90,9 +90,9 @@ class UserDetail(
 
 class UserActivationView(generics.GenericAPIView):
     def get (self, request, uid, token):
-        protocol = 'https://' if request.is_secure() else 'http://'
+        protocol = 'http://' #if request.is_secure() else 'http://'
         web_url = protocol + request.get_host()
-        post_url = web_url + "/api/v1/users/activation/"
+        post_url = 'http://localhost:8000' + "/api/v1/users/activation/"
         post_data = {'uid': uid, 'token': token}
         response = requests.post(post_url, post_data, timeout=20)
         return Response(response.json())
