@@ -207,3 +207,9 @@ function createAlert(header, data) {
 
 window.addEventListener("DOMContentLoaded", updateNavBar);
 
+function enable2fa(){
+
+
+  
+}
+

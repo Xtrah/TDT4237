@@ -18,29 +18,41 @@
                 <div class="col-lg text-center">
                     <h1>Activate Device</h1>
                     
+                    {% comment %} 
                     <div id="qrcode"></div>
-                    <script type="text/javascript">
+                    <script src="/scripts/qrcode.min.js"></script>
+                    <script>
                         
-                        let data = document.getCookie("Authorization");
+                        let accesscookie = getCookieValue('access')
+                        
+                        let data = document.cookie.split('; ').find(row => row.startsWith('access=')).split('=')[1];
 
-                        fetch("https://localhost:61603/api/totp/create/", {
-                            method: "POST", 
-                            body: JSON.stringify(data)
+                        fetch("https://localhost:9082/api/totp/create/", {
+                            method: "GET", 
+                            body: token
                         }).then(res => {
                             console.log("Request complete! response:", res);
-                            new QRCode(document.getElementById("qrcode"), "res");
-                        });
+                            new QRCode(document.getElementById("qrcode"), res);
+                        }); 
+                        
+                        
                         
                     </script>
 
                     <input type="text" placeholder="input OTP code" id="OTP-code">
+                    {% endcomment %}
 
-                    <button id="enable2faBtn">Enable 2fa</button>
+                    <button id="enable2faBtn" onClick="enable2fa()">Enable 2fa</button>
 
                 </div>
             </div>
         </div>
 
+        <script>
+            function enable2fa(){
+                
+            }
+        </script>
         <script src="scripts/scripts.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
     </body>

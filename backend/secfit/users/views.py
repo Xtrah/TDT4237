@@ -233,16 +233,24 @@ class TOTPCreateView(views.APIView):
 # Verify that user has a device and that it is confirmed
 class TOTPVerifyView(views.APIView):
     """
-    Use this endpoint to verify/enable a TOTP device
+    Api to verify/enable a TOTP device
     """
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = (IsAuthenticated, )
     def post(self, request, token, format=None):
         user = request.user
         device = get_user_totp_device(self, user)
+        if not device:
+            return Response(dict(
+           errors=['This user has not setup two factor authentication']),
+                status=HTTP_400_BAD_REQUEST
+            )
         if not device == None and device.verify_token(token):
             if not device.confirmed:
                 device.confirmed = True
                 device.save()
-            return Response(True, status=status.HTTP_200_OK)
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+                user.is_two_factor_enabled=True
+                user.save()
+            return Response(dict(token=user.token),   status=HTTP_200_OK)
+    return Response(dict(errors=dict(token=['Invalid TOTP Token'])),
+                        status=HTTP_400_BAD_REQUEST)
 
