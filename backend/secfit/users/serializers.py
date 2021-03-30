@@ -24,6 +24,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             "workouts",
             "coach_files",
             "athlete_files",
+            "is_two_factor_enabled",
         ]
 
     def validate_password(self, value):
@@ -78,6 +79,7 @@ class UserGetSerializer(serializers.HyperlinkedModelSerializer):
             "workouts",
             "coach_files",
             "athlete_files",
+            "is_two_factor_enabled",
         ]
 
 class UserPutSerializer(serializers.ModelSerializer):
