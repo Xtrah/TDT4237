@@ -3,7 +3,7 @@ from rest_framework import generics, mixins
 from comments.models import Comment, Like
 from rest_framework import permissions
 from comments.permissions import IsCommentVisibleToUser
-from workouts.permissions import IsOwner, IsReadOnly
+from workouts.permissions import IsOwner, IsReadOnly, IsWorkoutVisibleToUser
 from comments.serializers import CommentSerializer, LikeSerializer
 from django.db.models import Q
 from rest_framework.filters import OrderingFilter
@@ -14,7 +14,7 @@ class CommentList(
 ):
     # queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated & IsWorkoutVisibleToUser]
     filter_backends = [OrderingFilter]
     ordering_fields = ["timestamp"]
 
