@@ -21,7 +21,7 @@ groupid = os.environ.get("GROUPID", "0")
 # Email configuration
 # The host must be running within NTNU's VPN (vpn.ntnu.no) to allow this config
 # Usage: https://docs.djangoproject.com/en/3.1/topics/email/#obtaining-an-instance-of-an-email-backend
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.stud.ntnu.no"
 EMAIL_USE_TLS = False
 EMAIL_PORT = 25
@@ -30,12 +30,13 @@ DEFAULT_FROM_EMAIL = "tdt4237-group" + groupid + " " + "<noreply@idi.ntnu.no>"
 # Configure Djoser for email verification
 DJOSER = {
     "USER_ID_FIELD": "username",
-    "LOGIN_FIELD": "email",
+    "LOGIN_FIELD": "username",
     "SEND_ACTIVATION_EMAIL": True,
     "ACTIVATION_URL": "activate/{uid}/{token}",
+    "PASSWORD_RESET_CONFIRM_URL": "reset_password/{uid}/{token}",
     'SERIALIZERS': {
         'token_create': 'users.serializers.CustomTokenCreateSerializer',
-        'activation': 'djoser.email.ActivationEmail',   
+        'activation': 'djoser.serializers.ActivationSerializer',
     },
 }
 
@@ -175,6 +176,7 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 10,
     "DEFAULT_AUTHENTICATION_CLASSES": (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     ),
 }

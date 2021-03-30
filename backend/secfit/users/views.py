@@ -2,6 +2,11 @@ import django
 from rest_framework import mixins, generics
 from workouts.mixins import CreateListModelMixin
 from rest_framework import permissions
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from django.shortcuts import render
+
+import requests
 from users.serializers import (
     UserSerializer,
     OfferSerializer,
@@ -22,6 +27,9 @@ from django.shortcuts import get_object_or_404
 from rest_framework.parsers import MultiPartParser, FormParser
 from users.permissions import IsCurrentUser, IsAthlete, IsCoach
 from workouts.permissions import IsOwner, IsReadOnly
+
+import logging
+
 
 # Create your views here.
 class UserList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
@@ -78,6 +86,16 @@ class UserDetail(
 
     def patch(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
+
+
+class UserActivationView(generics.GenericAPIView):
+    def get (self, request, uid, token):
+        protocol = 'https://' if request.is_secure() else 'http://'
+        web_url = protocol + request.get_host()
+        post_url = web_url + "/api/v1/users/activation/"
+        post_data = {'uid': uid, 'token': token}
+        response = requests.post(post_url, post_data, timeout=20)
+        return Response(response.json())
 
 
 class OfferList(

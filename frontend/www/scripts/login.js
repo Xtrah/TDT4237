@@ -3,7 +3,7 @@ async function login() {
     let formData = new FormData(form);
     let body = {"username": formData.get("username"), "password": formData.get("password")};
 
-    let response = await sendRequest("POST", `${HOST}/api/v1/token/`, body)
+    let response = await sendRequest("POST", `${HOST}/api/token/`, body)
     if (response.ok) {
         let data = await response.json();
         // access and refresh cookies each have a max age of 24 hours

@@ -8,10 +8,11 @@ async function createNewUser(event) {
       let data = await response.json();
       let alert = createAlert("Registration failed!", data);
       document.body.prepend(alert);
-
+    
     } else {
-      let body = {username: formData.get("username"), password: formData.get("password")};
-      response = await sendRequest("POST", `${HOST}/api/v1/token/`, body);
+      // Hide login redirect
+      /*let body = {username: formData.get("username"), password: formData.get("password")};
+      response = await sendRequest("POST", `${HOST}/api/v1/token/login/`, body);
       if (response.ok) {
           let data = await response.json();
           setCookie("access", data.access, 86400, "/");
@@ -24,7 +25,12 @@ async function createNewUser(event) {
         document.body.prepend(alert);
       }
       form.reset();
-      window.location.replace("workouts.html");
+      window.location.replace("workouts.html");*/
+      let data = await response.json();
+      let email = formData.get("email");
+      let alert = createAlert("Registration completed! Verify your account by going to your email!", email.toString);
+      form.reset();
+      document.body.prepend(alert);
     }  
   }
 

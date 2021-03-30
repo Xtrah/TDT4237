@@ -9,7 +9,7 @@ from  django.core.mail import send_mail
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     password = serializers.CharField(style={"input_type": "password"}, write_only=True)
     password1 = serializers.CharField(style={"input_type": "password"}, write_only=True)
-
+    
     class Meta:
         model = get_user_model()
         fields = [
@@ -51,11 +51,15 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
         return value
 
+    def clean_email(self):
+        if User.objects.filter(email=self.cleaned_data['email']).exists():
+            raise forms.ValidationError("The given email is already registered")
+        return self.cleaned_data['email']
+
     def create(self, validated_data):
         username = validated_data["username"]
         email = validated_data["email"]
         password = validated_data["password"]
-        send_mail("Test", "/activate/uid/token", None, [email], fail_silently=False,)
         user_obj = get_user_model()(username=username, email=email)
         user_obj.set_password(password)
         user_obj.save()
@@ -75,7 +79,6 @@ class UserGetSerializer(serializers.HyperlinkedModelSerializer):
             "coach_files",
             "athlete_files",
         ]
-
 
 class UserPutSerializer(serializers.ModelSerializer):
     class Meta:
@@ -101,7 +104,6 @@ class CustomTokenCreateSerializer(TokenCreateSerializer):
             self.user = User.objects.filter(**params).first()
             if self.user and not self.user.check_password(password):
                 self.fail("invalid_credentials")
-        # We changed only below line
         if self.user: # and self.user.is_active: 
             return attrs
         self.fail("invalid_credentials")

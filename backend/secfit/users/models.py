@@ -10,7 +10,7 @@ class User(AbstractUser):
     """
     Standard Django User model with an added field for a user's coach.
     """
-
+    email = models.EmailField(unique=True)
     coach = models.ForeignKey(
         "self", on_delete=models.CASCADE, related_name="athletes", blank=True, null=True
     )

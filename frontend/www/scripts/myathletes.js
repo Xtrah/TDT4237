@@ -164,7 +164,7 @@ async function submitRoster() {
     for (let rosterInput of rosterInputs) {
         if (!rosterInput.disabled && rosterInput.value) {
             // get user
-            let response = await sendRequest("GET", `${HOST}/api/users/${rosterInput.value}/`);
+            let response = await sendRequest("GET", `${HOST}/api/v1/users/${rosterInput.value}/`);
             if (response.ok) {
                 let athlete = await response.json();
                 if (athlete.coach == currentUser.url) {

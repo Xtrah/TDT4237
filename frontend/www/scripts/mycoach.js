@@ -76,7 +76,7 @@ async function acceptOffer(event, offerUrl, ownerUsername) {
         let alert = createAlert("Could not accept offer!", data);
         document.body.prepend(alert);
     } else {
-        let response = await sendRequest("GET", `${HOST}/api/users/${ownerUsername}/`);
+        let response = await sendRequest("GET", `${HOST}/api/v1/users/${ownerUsername}/`);
         let owner = await response.json();
         let user = await getCurrentUser();
 
@@ -209,7 +209,7 @@ async function setCoach() {
     if (!newCoach) {
         body['coach'] = null;
     } else {
-        let response = await sendRequest("GET", `${HOST}/api/users/${newCoach}/`)
+        let response = await sendRequest("GET", `${HOST}/api/v1/users/${newCoach}/`)
         if (!response.ok) {
             let data = await response.json();
             let alert = createAlert(`Could not retrieve user ${newCoach}`, data);
