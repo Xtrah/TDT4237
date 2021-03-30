@@ -24,7 +24,9 @@ async function is2faEnabled() {
 
         input.value = coach.username;
     } else {
-        console.log("NO USER.COACH")
+        console.log("User is not 2fa enabled")
+        // Print qr code
+        
     }
 }
 
