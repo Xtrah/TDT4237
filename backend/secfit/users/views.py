@@ -243,6 +243,8 @@ class TOTPVerifyView(views.APIView):
             if not device.confirmed:
                 device.confirmed = True
                 device.save()
+                user.is_two_factor_enabled = True
+                user.save()
             return Response(True, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 

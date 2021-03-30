@@ -16,6 +16,8 @@ class User(AbstractUser):
         "self", on_delete=models.CASCADE, related_name="athletes", blank=True, null=True
     )
 
+    is_two_factor_enabled = models.BooleanField(default=False, null=False)
+
 
 def athlete_directory_path(instance, filename):
     """
