@@ -17,7 +17,26 @@
             <div class="row mt-3">
                 <div class="col-lg text-center">
                     <h1>Activate Device</h1>
-                    Text
+                    
+                    <div id="qrcode"></div>
+                    <script type="text/javascript">
+                        
+                        let data = document.getCookie("Authorization");
+
+                        fetch("https://localhost:61603/api/totp/create/", {
+                            method: "POST", 
+                            body: JSON.stringify(data)
+                        }).then(res => {
+                            console.log("Request complete! response:", res);
+                            new QRCode(document.getElementById("qrcode"), "res");
+                        });
+                        
+                    </script>
+
+                    <input type="text" placeholder="input OTP code" id="OTP-code">
+
+                    <button id="enable2faBtn">Enable 2fa</button>
+
                 </div>
             </div>
         </div>
