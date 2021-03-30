@@ -1,6 +1,4 @@
-// let data = document.getCookieValue("Authorization");
-
-// fetch("https://localhost:61603/api/totp/create/", {
+// send(host + "/api/totp/create/", {
 //     method: "POST",
 //     body: JSON.stringify(data)
 // }).then(res => {
@@ -13,20 +11,21 @@ async function is2faEnabled() {
     let enabled = false;
 
     if (user.is_two_factor_enabled) {
-        response = await sendRequest("GET", user.is_two_factor_enabled);
-        if (!response.ok) {
-            let data = await response.json();
-            let alert = createAlert("Could not retrieve 2FA!", data);
-            document.body.prepend(alert);
-        }
-        let coach = await response.json();
-        let input = document.querySelector("#input-coach");
+        document.querySelector("#enabled2fa").classList.remove("hide");
+        console.log("User is 2FA enabled :D")
 
-        input.value = coach.username;
     } else {
-        console.log("User is not 2fa enabled")
-        // Print qr code
-        
+        document.querySelector("#activate2fa").classList.remove("hide");
+        console.log("User is not 2FA enabled :(")
+
+        let data = getCookieValue("access");
+        let host = `${HOST}`
+        response = await sendRequest("GET", host + "/api/totp/create/");
+        let res = await response.json();
+        console.log(res)
+        // TODO: Create QR code from res
+        // Create POST request from input field and button
+        // If POST returns true, set user.is_two_factor_enabled = true
     }
 }
 
