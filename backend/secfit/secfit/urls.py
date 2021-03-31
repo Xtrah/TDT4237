@@ -24,6 +24,8 @@ from users import views
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("workouts.urls")),
+    path("api/v1/", include('djoser.urls')),
+    path("api/v1/", include('djoser.urls.authtoken')),
     re_path(r'^api/', include('users.urls')), # 2fa ---
 ]
 
