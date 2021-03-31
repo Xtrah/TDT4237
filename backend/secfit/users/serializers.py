@@ -62,6 +62,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         password = validated_data["password"]
         user_obj = get_user_model()(username=username, email=email)
         user_obj.set_password(password)
+        user_obj.is_active(False)
         user_obj.save()
         return user_obj
 
