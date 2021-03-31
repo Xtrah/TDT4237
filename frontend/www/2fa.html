@@ -1,38 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Home</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 
-        <script src="https://kit.fontawesome.com/0ce6c392ca.js" crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="styles/style.css">
-        <script src="scripts/navbar.js" type="text/javascript" defer></script>
-    </head>
-    <body>
-        <navbar-el></navbar-el>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 
-        <div class="container">
-            <div class="row mt-3">
-                <div class="col-lg text-center hide" id="activate2fa">
-                    <h1>Activate Device</h1>
-                    
-                    <div id="qrcode"></div>
-                    <input type="text" placeholder="input OTP code" id="OTP-code">
+    <script src="https://kit.fontawesome.com/0ce6c392ca.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="styles/style.css">
+    <script src="scripts/navbar.js" type="text/javascript" defer></script>
+</head>
 
-                    <button id="enable2faBtn">Enable 2FA</button>
-                </div>
-                <div class="col-lg text-center hide" id="enabled2fa">
-                    <h1 style="color: green">You have enabled 2FA</h1>
-                </div>
+<body>
+    <navbar-el></navbar-el>
+
+    <div class="container">
+        <div>
+            <div class="col-lg text-center hide" id="activate2fa">
+                <h1>Activate Device</h1>
+                <p>Use an authenticator app to scan the QR code. This will connect your Authenticator app to your
+                    account on SecFit.</p>
+                <div id="qrcode" class="text-center"></div>
+                <br>
+                <form class="form-inline">
+                    <div class="form-group">
+                        <input type="email" class="form-control" id="inputCode" aria-describedby="codeHelp"
+                            placeholder="Enter verification code">
+                        <small id="emailHelp" class="form-text text-muted">This action cannot be reversed.</small>
+                    </div>
+                    <br>
+                    <button type="submit" class="btn btn-primary mb-2">Confirm code</button>
+                </form>
+            </div>
+            <div class="col-lg text-center hide" id="enabled2fa">
+                <h1 style="color: green">You have enabled 2FA</h1>
             </div>
         </div>
+    </div>
 
-        <script src="scripts/defaults.js"></script>
-        <script src="scripts/scripts.js"></script>
-        <script src="scripts/2fa.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
-    </body>
+    <script src="scripts/defaults.js"></script>
+    <script src="scripts/scripts.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/davidshimjs-qrcodejs@0.0.2/qrcode.min.js"
+        integrity="sha256-xUHvBjJ4hahBW8qN9gceFBibSFUzbe9PNttUvehITzY=" crossorigin="anonymous"></script>
+    <script src="scripts/2fa.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous">
+    </script>
+</body>
 
 </html>

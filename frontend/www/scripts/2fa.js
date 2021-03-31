@@ -23,7 +23,10 @@ async function is2faEnabled() {
         response = await sendRequest("GET", host + "/api/totp/create/");
         let res = await response.json();
         console.log(res)
-        // TODO: Create QR code from res
+        new QRCode(document.getElementById("qrcode"), {
+            text: res,
+            // TODO: Styling
+        });
         // Create POST request from input field and button
         // If POST returns true, set user.is_two_factor_enabled = true
     }
