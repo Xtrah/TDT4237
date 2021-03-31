@@ -1,13 +1,15 @@
 from rest_framework import serializers
-from django.contrib.auth import get_user_model, password_validation
+from django.contrib.auth import get_user_model, password_validation, authenticate
 from users.models import Offer, AthleteFile
 from django import forms
-
+from djoser.conf import settings
+from djoser.serializers import TokenCreateSerializer
+from  django.core.mail import send_mail
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     password = serializers.CharField(style={"input_type": "password"}, write_only=True)
     password1 = serializers.CharField(style={"input_type": "password"}, write_only=True)
-
+    
     class Meta:
         model = get_user_model()
         fields = [
@@ -49,6 +51,11 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
         return value
 
+    def clean_email(self):
+        if User.objects.filter(email=self.cleaned_data['email']).exists():
+            raise forms.ValidationError("The given email is already registered")
+        return self.cleaned_data['email']
+
     def create(self, validated_data):
         username = validated_data["username"]
         email = validated_data["email"]
@@ -56,9 +63,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         user_obj = get_user_model()(username=username, email=email)
         user_obj.set_password(password)
         user_obj.save()
-
         return user_obj
-
 
 class UserGetSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -75,7 +80,6 @@ class UserGetSerializer(serializers.HyperlinkedModelSerializer):
             "athlete_files",
         ]
 
-
 class UserPutSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
@@ -86,6 +90,23 @@ class UserPutSerializer(serializers.ModelSerializer):
         instance.athletes.set(athletes_data)
 
         return instance
+
+User = get_user_model()
+
+class CustomTokenCreateSerializer(TokenCreateSerializer):
+    def validate(self, attrs):
+        password = attrs.get("password")
+        params = {settings.LOGIN_FIELD: attrs.get(settings.LOGIN_FIELD)}
+        self.user = authenticate(
+            request=self.context.get("request"), **params, password=password
+        )
+        if not self.user:
+            self.user = User.objects.filter(**params).first()
+            if self.user and not self.user.check_password(password):
+                self.fail("invalid_credentials")
+        if self.user: 
+            return attrs
+        self.fail("invalid_credentials")
 
 
 class AthleteFileSerializer(serializers.HyperlinkedModelSerializer):

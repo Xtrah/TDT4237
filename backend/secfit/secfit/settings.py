@@ -27,6 +27,20 @@ EMAIL_USE_TLS = False
 EMAIL_PORT = 25
 DEFAULT_FROM_EMAIL = "tdt4237-group" + groupid + " " + "<noreply@idi.ntnu.no>"
 
+# Configure Djoser for email verification
+DJOSER = {
+    "USER_ID_FIELD": "username",
+    "LOGIN_FIELD": "username",
+    "SEND_ACTIVATION_EMAIL": True,
+    "ACTIVATION_URL": "activate/{uid}/{token}",
+    "PASSWORD_RESET_CONFIRM_URL": "reset_password/{uid}/{token}",
+    'SERIALIZERS': {
+        'token_create': 'users.serializers.CustomTokenCreateSerializer',
+        'activation': 'djoser.serializers.ActivationSerializer',
+    },
+}
+
+SITE_NAME = "SecFit"
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
@@ -61,6 +75,8 @@ INSTALLED_APPS = [
     "users.apps.UsersConfig",
     "comments.apps.CommentsConfig",
     "corsheaders",
+    "djoser",
+    "rest_framework.authtoken",
 ]
 
 MIDDLEWARE = [
@@ -112,13 +128,13 @@ if is_prod:
 
 # CORS Policy
 CORS_ORIGIN_ALLOW_ALL = (
-    True # "False" enables whitelist of origins and methods
+    False
 )
 
 # Whitelist
 CORS_ALLOWED_ORIGINS = [
-    'https://localhost:9090',
-    'http://localhost:9090'
+    'https://localhost:9082',
+    'http://localhost:9082'
 ]
 
 # Allowed methods
@@ -152,12 +168,12 @@ STATIC_URL = "/static/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
 
-
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 10,
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ),
 }
 
