@@ -84,11 +84,9 @@ class IsWorkoutVisibleToUser(permissions.BasePermission):
                 workout_id = request.data["workout"].split("/")[-2]
                 workout = Workout.objects.get(pk=workout_id)
                 if workout:
-                    return  workout.visibility == "PU" or workout.owner == request.user or (workout.visibility == "CO" and workout.owner.coach == request.user)
+                    return workout.visibility == "PU" or workout.owner == request.user or (workout.visibility == "CO" and workout.owner.coach == request.user)
             return False
         return True
 
     def has_object_permission(self, request, view, obj):
-        return  obj.workout.owner.coach == request.user and (
-                obj.workout.visibility == "PU" or obj.workout.visibility == "CO"
-                )
+        return  obj.workout.visibility == "PU" or (obj.workout.owner.coach == request.user and obj.workout.visibility == "CO") or (obj.workout.owner == request.user)
