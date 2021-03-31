@@ -12,8 +12,8 @@ class CustomUserAdmin(UserAdmin):
     form = CustomUserChangeForm
     model = get_user_model()
     # list_display = UserAdmin.list_display + ('coach',)
-    fieldsets = UserAdmin.fieldsets + ((None, {"fields": ("coach",)}),)
-    add_fieldsets = UserAdmin.add_fieldsets + ((None, {"fields": ("coach",)}),)
+    fieldsets = UserAdmin.fieldsets + ((None, {"fields": ("coach", "is_two_factor_enabled",)}),)
+    add_fieldsets = UserAdmin.add_fieldsets + ((None, {"fields": ("coach", "is_two_factor_enabled",)}),)
 
 
 admin.site.register(get_user_model(), CustomUserAdmin)

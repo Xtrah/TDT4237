@@ -25,6 +25,7 @@ function updateNavBar() {
   }
 
   if (isUserAuthenticated()) {
+    document.getElementById("btn-2fa").classList.remove("hide");
     document.getElementById("btn-logout").classList.remove("hide");
 
     document.querySelector('a[href="logout.html"').classList.remove("hide");

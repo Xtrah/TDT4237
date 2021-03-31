@@ -27,7 +27,11 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from users.permissions import IsCurrentUser, IsAthlete, IsCoach, IsOfferReceiverOrOwner
 from workouts.permissions import IsOwner, IsReadOnly
 
-import logging
+# For 2fa
+from rest_framework.response import Response
+from rest_framework import status, views, permissions
+from django_otp import devices_for_user
+from django_otp.plugins.otp_totp.models import TOTPDevice
 
 
 # Create your views here.
@@ -203,3 +207,44 @@ class AthleteFileDetail(
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
+
+
+# 2fa
+# Return user 2fa configured device
+def get_user_totp_device(self, user, confirmed=None):
+    devices = devices_for_user(user, confirmed=confirmed)
+    for device in devices:
+        if isinstance(device, TOTPDevice):
+            return device
+
+# If authenticated, set up new TOTP device
+class TOTPCreateView(views.APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def get(self, request, format=None):
+        user = request.user
+        device = get_user_totp_device(self, user)
+        if not device:
+            device = user.totpdevice_set.create(confirmed=False)
+        url = device.config_url
+        return Response(url, status=status.HTTP_201_CREATED)
+
+
+# Verify that user has a device and that it is confirmed
+class TOTPVerifyView(views.APIView):
+    """
+    Use this endpoint to verify/enable a TOTP device
+    """
+    permission_classes = [permissions.IsAuthenticated]
+    def post(self, request, token, format=None):
+        user = request.user
+        device = get_user_totp_device(self, user)
+        if not device == None and device.verify_token(token):
+            if not device.confirmed:
+                device.confirmed = True
+                device.save()
+                user.is_two_factor_enabled = True
+                user.save()
+            return Response(True, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+

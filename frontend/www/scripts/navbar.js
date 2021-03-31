@@ -23,6 +23,7 @@ class NavBar extends HTMLElement {
             <div class="my-2 my-lg-0 me-5">
                 <a role="button" class="btn btn-primary hide" id="btn-register" href="register.html">Register</a>
                 <a role="button" class="btn btn-secondary hide" id="btn-login-nav" href="login.html">Log in</a>
+                <a role="button" class="btn btn-primary hide" id="btn-2fa" href="2fa.html">2FA</a>
                 <a role="button" class="btn btn-secondary hide" id="btn-logout" href="logout.html">Log out</a>
             </div>
             </div>

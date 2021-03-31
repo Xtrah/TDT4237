@@ -1,5 +1,4 @@
-from django.urls import path, re_path
-from django.conf.urls import url, include
+from django.urls import path, include, re_path
 from users import views
 from rest_framework.urlpatterns import format_suffix_patterns
 
@@ -19,5 +18,15 @@ urlpatterns = [
         views.AthleteFileDetail.as_view(),
         name="athletefile-detail",
     ),
+    re_path(
+        r'^totp/create/$', 
+        views.TOTPCreateView.as_view(), 
+        name='totp-create'
+        ), # create view for "creating" totp
+    re_path(
+        r'^totp/login/(?P<token>[0-9]{6})/$', 
+        views.TOTPVerifyView.as_view(), 
+        name='totp-login'
+        ), # Create view for totp login
 ]
 
