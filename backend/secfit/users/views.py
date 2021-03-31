@@ -5,8 +5,7 @@ from rest_framework import permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.shortcuts import render
-
-import requests
+from django.shortcuts import redirect
 from users.serializers import (
     UserSerializer,
     OfferSerializer,
@@ -90,13 +89,11 @@ class UserDetail(
 
 class UserActivationView(generics.GenericAPIView):
     def get (self, request, uid, token):
-        protocol = 'http://' #if request.is_secure() else 'http://'
-        web_url = protocol + request.get_host()
-        post_url = 'http://localhost:8000' + "/api/v1/users/activation/"
-        post_data = {'uid': uid, 'token': token}
-        response = requests.post(post_url, post_data, timeout=20)
-        return Response(response.json())
+        return redirect(f"/activate.html?uid={uid}&token={token}")
 
+class UserResetPasswordView(generics.GenericAPIView):
+    def get (self, request, uid, token):
+        return redirect(f'/setnewpassword.html?uid={uid}&token={token}')
 
 class OfferList(
     mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView

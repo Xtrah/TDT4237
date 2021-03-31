@@ -25,8 +25,6 @@ urlpatterns = [
     path("", include("workouts.urls")),
     path("api/v1/", include('djoser.urls')),
     path("api/v1/", include('djoser.urls.authtoken')),
-    url(r'^auth/', include('djoser.urls')),
-    url(r'^auth/', include('djoser.urls.jwt')),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
