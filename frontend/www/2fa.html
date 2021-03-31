@@ -17,27 +17,38 @@
     <navbar-el></navbar-el>
 
     <div class="container">
-        <div>
-            <div class="col-lg text-center hide" id="activate2fa">
-                <h1>Activate Device</h1>
-                <p>Use an authenticator app to scan the QR code. This will connect your Authenticator app to your
-                    account on SecFit.</p>
-                <div id="qrcode" class="text-center"></div>
-                <br>
-                <form class="form-inline">
-                    <div class="form-group">
-                        <input type="email" class="form-control" id="inputCode" aria-describedby="codeHelp"
-                            placeholder="Enter verification code">
-                        <small id="emailHelp" class="form-text text-muted">This action cannot be reversed.</small>
-                    </div>
-                    <br>
-                    <button type="submit" class="btn btn-primary mb-2">Confirm code</button>
-                </form>
-            </div>
-            <div class="col-lg text-center hide" id="enabled2fa">
-                <h1 style="color: green">You have enabled 2FA</h1>
-            </div>
+        <div class="col-lg text-center hide" id="enabled2fa">
+            <h1 style="color: green">You have enabled 2FA!</h1>
+            <p>Enter your code to be authenticated for 2FA-only pages:</p>
         </div>
+        <div class="col-lg text-center hide" id="activate2fa">
+            <h1>Activate Device</h1>
+            <p>Use an authenticator app to scan the QR code. This will connect your Authenticator app to your
+                account on SecFit.</p>
+            <div id="qrcode" class="text-center"></div>
+            <br>
+        </div>
+            <form class="form-inline" id="2fa-form">
+                <div class="input-group mb-2">
+                    <span class="input-group-text"> <i class="fas fa-user"></i> </span>
+                    <input class="form-control" name="username" id="inputUsername" placeholder="Username" type="text"
+                        required disabled>
+                </div>
+                <div class="input-group mb-2">
+                    <span class="input-group-text"> <i class="fas fa-lock"></i> </span>
+                    <input class="form-control" name="password" id="inputPassword" placeholder="Verify password"
+                        type="password" required>
+                </div>
+
+                <div class="input-group mb-2">
+                    <span class="input-group-text"> <i class="fas fa-shield-alt"></i> </span>
+                    <input class="form-control" name="inputCode" id="inputCode"
+                        placeholder="Verification code from Authenticator app" type="text" required>
+                </div>
+                <br>
+                <input type="button" class="btn btn-primary" id="btn-activate-2fa" value="Verify code">
+            </form>
+
     </div>
 
     <script src="scripts/defaults.js"></script>
