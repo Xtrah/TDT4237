@@ -42,4 +42,6 @@ class IsOfferReceiverOrSafe(permissions.BasePermission):
         print(request.user)
         if request.method == "PATCH":
             return request.user == obj.recipient
-        return request.method in permissions.SAFE_METHODS
+        if request.method == "GET":
+            return request.user == obj.owner or request.user == obj.recipient
+        return False
