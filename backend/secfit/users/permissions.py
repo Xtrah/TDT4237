@@ -35,8 +35,11 @@ class IsCoach(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         return request.user == obj.athlete.coach
 
-class IsOfferReceiverOrSafe(permissions.BasePermission):
-    """Returns true if the patch request is sent from the offer reciever or if it is a safe method"""
+class IsOfferReceiverOrOwner(permissions.BasePermission):
+    """Returns true if the following is the case:
+       - It is a PATCH request sent by offer recipient
+       - It is a GET request sent by offer recipient or offer owner
+    """
     def has_object_permission(self, request, view, obj):
         print(obj.recipient)
         print(request.user)

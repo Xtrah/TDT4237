@@ -20,7 +20,7 @@ from django.contrib.auth import get_user_model
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from rest_framework.parsers import MultiPartParser, FormParser
-from users.permissions import IsCurrentUser, IsAthlete, IsCoach, IsOfferReceiverOrSafe
+from users.permissions import IsCurrentUser, IsAthlete, IsCoach, IsOfferReceiverOrOwner
 from workouts.permissions import IsOwner, IsReadOnly
 
 # Create your views here.
@@ -125,7 +125,7 @@ class OfferDetail(
     mixins.DestroyModelMixin,
     generics.GenericAPIView,
 ):
-    permission_classes = [IsAuthenticatedOrReadOnly & IsOfferReceiverOrSafe]
+    permission_classes = [IsAuthenticatedOrReadOnly & IsOfferReceiverOrOwner]
     queryset = Offer.objects.all()
     serializer_class = OfferSerializer
 
