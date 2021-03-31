@@ -128,13 +128,13 @@ if is_prod:
 
 # CORS Policy
 CORS_ORIGIN_ALLOW_ALL = (
-    True # "False" enables whitelist of origins and methods
+    False
 )
 
 # Whitelist
 CORS_ALLOWED_ORIGINS = [
-    'https://localhost:9090',
-    'http://localhost:9090'
+    'https://localhost:9082',
+    'http://localhost:9082'
 ]
 
 # Allowed methods
@@ -167,10 +167,6 @@ STATIC_URL = "/static/"
 # MEDIA FILES
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
-
-SIMPLE_JWT = {
-   'AUTH_HEADER_TYPES': ('JWT',),
-}
 
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
