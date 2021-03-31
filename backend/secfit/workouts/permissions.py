@@ -70,3 +70,25 @@ class IsReadOnly(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         return request.method in permissions.SAFE_METHODS
+
+class IsWorkoutVisibleToUser(permissions.BasePermission):
+    """ Returns true in these cases:
+        - The workout is public
+        - The workout is visible to coaches and the requesting user is a coach
+        - The user is the owner of the workout
+    """
+
+    def has_permission(self, request, view):
+        if request.method == "POST":
+            if request.data.get("workout"):
+                workout_id = request.data["workout"].split("/")[-2]
+                workout = Workout.objects.get(pk=workout_id)
+                if workout:
+                    return  workout.visibility == "PU" or workout.owner == request.user or (workout.visibility == "CO" and workout.owner.coach == request.user)
+            return False
+        return True
+
+    def has_object_permission(self, request, view, obj):
+        return  obj.workout.owner.coach == request.user and (
+                obj.workout.visibility == "PU" or obj.workout.visibility == "CO"
+                )
